@@ -15,3 +15,15 @@ with console.screen(style="bold white on red") as screen:
         )
         screen.update(Panel(text))
         sleep(1)
+
+# 🎨 Basic Named Colors
+# black, red, green, yellow, blue, magenta, cyan, white
+
+# 🌈 Bright Variants
+# bright_black, bright_red, bright_green, bright_yellow,
+# bright_blue, bright_magenta, bright_cyan, bright_white
+
+# 💎 Other Common Named Colors
+# grey, gray, orange1, gold1, violet, pink1, deeppink1,
+# turquoise2, sky_blue1, dodger_blue2, plum1, purple,
+# aquamarine1, spring_green2, chartreuse2, green_yellow

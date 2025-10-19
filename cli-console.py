@@ -1,5 +1,8 @@
+import textwrap
 from openai import OpenAI
 from dotenv import load_dotenv
+from rich import print
+from yaspin import yaspin
 import inquirer
 import os
 
@@ -12,7 +15,7 @@ def ask_llm_model():
         inquirer.List(
             'LLM-model',
             message="Pick a model",
-            choices=['gpt-5', 'gpt-4o'],
+            choices=['ChatGPT 5', 'ChatGPT 4o'],
         ),
     ]
 
@@ -21,7 +24,7 @@ def ask_llm_model():
 
 def openai_chat_response(model: str, message: str):
     result = client.responses.create(
-        model=model,
+        model="gpt-5",
         input=message,
         reasoning={"effort": "low"},
         text={"verbosity": "low"},
@@ -30,17 +33,28 @@ def openai_chat_response(model: str, message: str):
 
 def main():
     model = ask_llm_model()
-    print(f"You chose: {model}")
+    print(f"[bold blue]You chose: {model}[/bold blue]")
 
     while True:
-        command = input(":")
+        print("\n[bold green]ME > [/bold green]", end="") # displays the prompt without a newline
+        command = input()  # read user input
 
         if command == 'switch':
             model = ask_llm_model()
-            print(f"You chose: {model}")
-        else:
-            response = openai_chat_response(model, command)
-            print(response)
+            print(f"[bold blue]You chose: {model}[/bold blue]")
+            continue
+
+        if model == 'ChatGPT 5':
+
+            # Start spinner while waiting for response
+            with yaspin(text="", color="magenta") as spinner:
+                response = openai_chat_response(model, command)
+            
+            wrapped_response = textwrap.fill(response, width=120)
+            print(f"\n[bold magenta]{model}[/bold magenta]> {wrapped_response}") # model’s reply
+        
+        elif model == 'ChatGPT 4o':
+            print("\ngpt-4o is not supported yet\n")
 
 if __name__ == '__main__':
     main()
