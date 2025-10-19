@@ -1,0 +1,8 @@
+typer
+inquirer
+yaspin
+pyfiglet
+tabulate
+rich
+python-dotenv
+openai  
