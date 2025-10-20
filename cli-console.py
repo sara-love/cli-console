@@ -82,13 +82,15 @@ def main():
             # Start spinner while waiting for response
             with yaspin(text="", color="magenta") as spinner:
                 response = openai_chat_response(model, command)
-            
+                spinner.stop()
+
             wrapped_response = textwrap.fill(response, width=120)
             print(f"\n[bold magenta]{model}[/bold magenta]> {wrapped_response}") # model’s reply
         
         elif model == 'anthropic':
             with yaspin(text="", color="magenta") as spinner:
                 response = anthropic_chat_response(command)
+                spinner.stop()
             
             wrapped_response = textwrap.fill(response, width=120)
             print(f"\n[bold magenta]{model}[/bold magenta]> {wrapped_response}") # model’s reply
