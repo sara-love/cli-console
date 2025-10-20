@@ -6,4 +6,5 @@ tabulate
 rich
 rich-gradient
 python-dotenv
-openai      
+openai   
+anthropic   
