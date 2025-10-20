@@ -1,16 +1,23 @@
-import textwrap
 from openai import OpenAI
 from dotenv import load_dotenv
+
 from rich import print
+from rich.console import Console
+from rich.text import Text
+from rich_gradient.text import Text
+
+from pyfiglet import Figlet
 from yaspin import yaspin
+import textwrap
 import inquirer
 import os
 
 load_dotenv()
+console = Console()
 
 client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 
-def ask_llm_model():
+def select_llm_model():
     questions = [
         inquirer.List(
             'LLM-model',
@@ -29,23 +36,33 @@ def openai_chat_response(model: str, message: str):
         reasoning={"effort": "low"},
         text={"verbosity": "low"},
     )
+    # Add newline before printing
+    print("\n" + result.output_text)
+
     return result.output_text
 
 def main():
-    model = ask_llm_model()
+    f = Figlet(font='ansi_shadow')
+    banner = f.renderText("SARALOVE")
+    lines = banner.splitlines()
+
+    for line in lines:
+        text = Text(line, colors=["#E56AB3", "#EF87B5", "#F9A3CB", "#FCBCD7"])
+        console.print(text)
+
+    model = select_llm_model()
     print(f"[bold blue]You chose: {model}[/bold blue]")
 
     while True:
         print("\n[bold green]ME > [/bold green]", end="") # displays the prompt without a newline
-        command = input()  # read user input
+        command = input()
 
         if command == 'switch':
-            model = ask_llm_model()
+            model = select_llm_model()
             print(f"[bold blue]You chose: {model}[/bold blue]")
             continue
 
         if model == 'ChatGPT 5':
-
             # Start spinner while waiting for response
             with yaspin(text="", color="magenta") as spinner:
                 response = openai_chat_response(model, command)

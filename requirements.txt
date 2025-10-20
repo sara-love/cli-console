@@ -4,5 +4,6 @@ yaspin
 pyfiglet
 tabulate
 rich
+rich-gradient
 python-dotenv
-openai  
+openai      

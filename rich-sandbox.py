@@ -4,17 +4,23 @@ from rich.console import Console
 from rich.align import Align
 from rich.text import Text
 from rich.panel import Panel
+from rich_gradient.text import Text 
 
 console = Console()
 
-with console.screen(style="bold white on red") as screen:
-    for count in range(5, 0, -1):
-        text = Align.center(
-            Text.from_markup(f"[blink]Don't Panic![/blink]\n{count}", justify="center"),
-            vertical="middle",
-        )
-        screen.update(Panel(text))
-        sleep(1)
+# with console.screen(style="bold white on red") as screen:
+#     for count in range(5, 0, -1):
+#         text = Align.center(
+#             Text.from_markup(f"[blink]Don't Panic![/blink]\n{count}", justify="center"),
+#             vertical="middle",
+#         )
+#         screen.update(Panel(text))
+#         sleep(1)
+
+console.print(
+    Text(
+        "Hello, World!",
+        colors=["purple", "pink"]))
 
 # 🎨 Basic Named Colors
 # black, red, green, yellow, blue, magenta, cyan, white
