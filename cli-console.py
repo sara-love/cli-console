@@ -25,7 +25,7 @@ def select_llm_model():
         inquirer.List(
             'LLM-model',
             message="Pick a model",
-            choices=['ChatGPT 5', 'Claude 4.5'],
+            choices=['openai', 'anthropic'],
         ),
     ]
 
@@ -78,7 +78,7 @@ def main():
             print(f"[bold blue]You chose: {model}[/bold blue]")
             continue
 
-        if model == 'ChatGPT 5':
+        if model == 'openai':
             # Start spinner while waiting for response
             with yaspin(text="", color="magenta") as spinner:
                 response = openai_chat_response(model, command)
@@ -86,7 +86,7 @@ def main():
             wrapped_response = textwrap.fill(response, width=120)
             print(f"\n[bold magenta]{model}[/bold magenta]> {wrapped_response}") # model’s reply
         
-        elif model == 'Claude 4.5':
+        elif model == 'anthropic':
             with yaspin(text="", color="magenta") as spinner:
                 response = anthropic_chat_response(command)
             
