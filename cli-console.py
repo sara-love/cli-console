@@ -5,6 +5,7 @@ from rich import print
 from rich.console import Console
 from rich.text import Text
 from rich_gradient.text import Text
+from rich.prompt import Prompt
 
 from pyfiglet import Figlet
 from yaspin import yaspin
@@ -46,16 +47,18 @@ def main():
     banner = f.renderText("SARALOVE")
     lines = banner.splitlines()
 
+    console.print("\n")
     for line in lines:
         text = Text(line, colors=["#E56AB3", "#EF87B5", "#F9A3CB", "#FCBCD7"])
         console.print(text)
+
+    print("[bold yellow]Type 'switch' anytime to change the model.[/bold yellow]\n")
 
     model = select_llm_model()
     print(f"[bold blue]You chose: {model}[/bold blue]")
 
     while True:
-        print("\n[bold green]ME > [/bold green]", end="") # displays the prompt without a newline
-        command = input()
+        command = Prompt.ask("\n[bold green]ME > [/bold green]") # displays the prompt without a newline
 
         if command == 'switch':
             model = select_llm_model()
