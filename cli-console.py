@@ -6,7 +6,7 @@ from rich import print
 from rich.console import Console
 from rich.text import Text
 from rich_gradient.text import Text
-from rich.prompt import Prompt
+from rich.panel import Panel
 
 from pyfiglet import Figlet
 from yaspin import yaspin
@@ -19,13 +19,15 @@ console = Console()
 
 openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 anthropic_client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
+# gemini_client = Gemini(api_key=os.getenv("GEMINI_API_KEY"))
+# grok_client = Grok(api_key=os.getenv("GROK_API_KEY"))
 
 def select_llm_model():
     questions = [
         inquirer.List(
             'LLM-model',
             message="Pick a model",
-            choices=['openai', 'anthropic'],
+            choices=['openai', 'anthropic', 'gemini', 'grok'],
         ),
     ]
 
@@ -39,8 +41,6 @@ def openai_chat_response(model: str, message: str):
         reasoning={"effort": "low"},
         text={"verbosity": "low"},
     )
-    # Add newline before printing
-    print("\n" + result.output_text)
 
     return result.output_text
 
@@ -65,35 +65,38 @@ def main():
         text = Text(line, colors=["#E56AB3", "#EF87B5", "#F9A3CB", "#FCBCD7"])
         console.print(text)
 
-    print("[bold yellow]Type 'switch' anytime to change the model.[/bold yellow]\n")
+    console.print("[bold violet]🌸✨💖 Hello, Star Coder, [magenta]You've Reached SARALOVE[/magenta] 🌸✨💖[/bold violet]")
+    console.print("[bold yellow]💫⭐✨ Type freely the stars are listening ✨⭐💫[/bold yellow]\n")
 
     model = select_llm_model()
-    print(f"[bold blue]You chose: {model}[/bold blue]")
+    console.print("[bold yellow]Type 'switch' anytime to change the model.[/bold yellow]\n")
 
     while True:
-        command = Prompt.ask("\n[bold green]ME > [/bold green]") # displays the prompt without a newline
+        console.print("[magenta]saralove >[/magenta]", end=" ")
+        command = input()
 
-        if command == 'switch':
-            model = select_llm_model()
-            print(f"[bold blue]You chose: {model}[/bold blue]")
+        if not command:
+            console.print("\n[bold red]{-_-} Please enter a command {-_-}[/bold red]\n")
             continue
 
-        if model == 'openai':
+        elif command == 'switch':
+            model = select_llm_model()
+            continue
+
+        elif model == 'openai':
             # Start spinner while waiting for response
             with yaspin(text="", color="magenta") as spinner:
                 response = openai_chat_response(model, command)
                 spinner.stop()
 
-            wrapped_response = textwrap.fill(response, width=120)
-            print(f"\n[bold magenta]{model}[/bold magenta]> {wrapped_response}") # model’s reply
+            print(Panel(f"\n{response}", border_style="magenta", title="ChatGPT 5")) # model’s reply
         
         elif model == 'anthropic':
             with yaspin(text="", color="magenta") as spinner:
                 response = anthropic_chat_response(command)
                 spinner.stop()
             
-            wrapped_response = textwrap.fill(response, width=120)
-            print(f"\n[bold magenta]{model}[/bold magenta]> {wrapped_response}") # model’s reply
+            print(Panel(f"{response}", border_style="red", title="Claude Sonnet 4.5")) # model’s reply
 
         elif model == 'ChatGPT 4o':
             print("\ngpt-4o is not supported yet\n")

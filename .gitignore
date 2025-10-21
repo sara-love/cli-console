@@ -5,3 +5,5 @@ __pycache__
 *.pyc
 sandbox.py
 rich-sandbox.py
+rich-panel.py
+rich-fullscreen.py
