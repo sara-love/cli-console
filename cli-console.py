@@ -28,7 +28,7 @@ def main_menu():
     questions = [
         inquirer.List(
             'action',
-            message="Choose what to do:",
+            message="Choose activity",
             choices=[
                 'chat with ai',
                 'write note',
@@ -47,7 +47,7 @@ def select_llm_model():
         sub_q = [
             inquirer.List(
                 'model',
-                message="Choose model:",
+                message="Choose llm model",
                 choices=['chatgpt', 'anthropic', 'grok']
             ),
         ]
