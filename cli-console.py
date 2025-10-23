@@ -1,5 +1,8 @@
 from openai import OpenAI
 from anthropic import Anthropic
+from google import genai
+from xai_sdk import Client
+from xai_sdk.chat import user, system
 from dotenv import load_dotenv
 
 from rich import print
@@ -21,8 +24,8 @@ console = Console()
 
 openai_client = OpenAI(api_key=os.getenv("OPENAI_API_KEY"))
 anthropic_client = Anthropic(api_key=os.getenv("ANTHROPIC_API_KEY"))
-# gemini_client = Gemini(api_key=os.getenv("GEMINI_API_KEY"))
-# grok_client = Grok(api_key=os.getenv("GROK_API_KEY"))
+xai_client = Client(api_key=os.getenv("XAI_API_KEY"))
+gemini_client = genai.Client()
 
 def main_menu():
     questions = [
@@ -48,7 +51,7 @@ def select_llm_model():
             inquirer.List(
                 'model',
                 message="Choose llm model",
-                choices=['chatgpt', 'anthropic', 'grok']
+                choices=['chatgpt', 'anthropic', 'gemini', 'grok']
             ),
         ]
         model = inquirer.prompt(sub_q)['model']
@@ -78,6 +81,22 @@ def anthropic_chat_response(query: str):
 
     return result.content[0].text
 
+def gemini_chat_response(query: str):
+    result = gemini_client.models.generate_content(
+        model="gemini-2.5-flash",
+        contents=query,
+    )
+    return result.text
+
+def grok_chat_response(query: str):
+    chat = xai_client.chat.create(
+        model="grok-4")
+
+    chat.append(user(query))
+
+    result = chat.sample()
+    return result
+
 def main():
     f = Figlet(font='ansi_shadow')
     banner = f.renderText("SARALOVE")
@@ -103,7 +122,7 @@ def main():
             continue
 
         if command == 'switch':
-            select_llm_model()
+            model = select_llm_model()
             continue
 
         elif command == 'menu':
@@ -112,21 +131,32 @@ def main():
 
         elif model == 'chatgpt':
             # Start spinner while waiting for response
-            with yaspin(text="", color="magenta") as spinner:
+            with yaspin(text="", color="green") as spinner:
                 response = openai_chat_response(model, command)
                 spinner.stop()
 
-            print(Panel(f"\n{response}", border_style="magenta", title="ChatGPT 5")) # model’s reply
+            print(Panel(f"\n{response}", border_style="green", title="ChatGPT 5")) # model’s reply
         
         elif model == 'anthropic':
-            with yaspin(text="", color="magenta") as spinner:
+            with yaspin(text="", color="red") as spinner:
                 response = anthropic_chat_response(command)
                 spinner.stop()
             
             print(Panel(f"{response}", border_style="red", title="Claude Sonnet 4.5")) # model’s reply
 
-        elif model == 'ChatGPT 4o':
-            print("\ngpt-4o is not supported yet\n")
+        elif model == 'gemini':
+            with yaspin(text="", color="blue") as spinner:
+                response = gemini_chat_response(command)
+                spinner.stop()
+            
+            print(Panel(f"{response}", border_style="blue", title="Gemini 2.5 Flash")) # model’s reply
+
+        elif model == 'grok':
+            with yaspin(text="", color="grey") as spinner:
+                response = grok_chat_response(command)
+                spinner.stop()
+            
+            print(Panel(f"{response}", border_style="grey", title="Grok 4")) # model’s reply
 
 if __name__ == '__main__':
     main()

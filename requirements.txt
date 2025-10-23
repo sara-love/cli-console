@@ -8,3 +8,5 @@ rich-gradient
 python-dotenv
 openai   
 anthropic   
+google-genai
+xai-sdk
