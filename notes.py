@@ -1,7 +1,7 @@
 from datetime import datetime
 import os
 
-def main():
+def write_note():
     main_folder_name = "notes"
 
     if not os.path.exists(main_folder_name):
@@ -21,7 +21,21 @@ def main():
 
     print(f"Note saved to {file_path}")
 
+    # Collect lines until user types 'esc'
+    lines = []
+    while True:
+        line = input()
+        if line == "esc":
+            break
+        lines.append(line)
+
+    # Write lines to file
+    with open(file_path, "a") as f:
+        f.write("\n".join(lines))
+
+    print(f"Note saved to {file_path}")
+
 
 if __name__ == "__main__":
-    main()
+    write_note()
     

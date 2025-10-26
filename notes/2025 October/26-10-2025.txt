@@ -1,1 +1,1 @@
-Notes for {today.strftime('%d-%m-%Y')}
+Notes for {today.strftime('%d-%m-%Y')}hello there i am writing some notes. I hope this works in the first please :/

@@ -10,3 +10,4 @@ openai
 anthropic   
 google-genai
 xai-sdk
+keyboard
