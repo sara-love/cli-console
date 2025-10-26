@@ -1,0 +1,1 @@
+Notes for {today.strftime('%d-%m-%Y')}
